@@ -140,10 +140,10 @@ ZDate.getWeekString = function(date) {
     return date.getFullYear() * 100 + week + 2;
 }
 
-ZDate.weekPicker = function(ipt){
+ZDate.weekPicker = function(ipt,cb){
     var ipt = $(ipt);
     var initVal = $.trim(ipt.val());
-
+    var self = this;
     var getEle = function(){
         var table = $('<table class="zWeekPicker"></table>');
         var thead = $('<thead></thead>').appendTo(table);
@@ -199,7 +199,9 @@ ZDate.weekPicker = function(ipt){
             var year = table.find('.spanYear').text();
             var week = $(this).html();
             var text = year + week
-            ipt.val(text);
+            self.ipt.val(text);
+            var callback=self.ipt.data("cb");
+            callback&&callback(self.ipt);
         })
         .on('click', function(e){
             e.stopPropagation();
@@ -213,7 +215,9 @@ ZDate.weekPicker = function(ipt){
     }
 
     ipt = $(ipt);
+    ipt.data("cb",cb);
     ipt.on('click', function(e){
+        self.ipt=ipt;
         e.stopPropagation();
         var ele = $('.zWeekPicker');
         if(ele.length === 0){
